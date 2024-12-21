@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         body {
-            font-family: Arial, sans-serif; 
+            font-family: Arial, sans-serif;
             background-color: #2e2e2e;
             color: #000000;
-            text-align: center;
-            margin-top: 50px;
+            margin: 0;
+            padding: 0;
         }
 
         .header {
@@ -20,6 +20,7 @@
             color: rgb(255, 116, 109);
             padding: 20px;
             font-size: 3rem;
+            text-align: center;
         }
 
         .post-form {
@@ -27,94 +28,93 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
+            margin: 20px;
         }
 
         .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
+            column-count: 3;
+            column-gap: 15px;
+            padding: 15px;
         }
 
-        .card {
-            border: none;
-            overflow: hidden;
-        }
-
-        .card img {
-            border-radius: 1px;
+        .gallery img {
             width: 100%;
-            height: auto;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s;
             object-fit: cover;
         }
 
-        .card-body {
+        .gallery img:hover {
+            transform: scale(1.05);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1050;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
             text-align: center;
-            padding: 10px;
+            max-width: 70%;
+            max-height: 90%;
+            overflow: auto;
+            transition: all 0.3s ease;
         }
 
-        .btn-custom {
-            background-color: #3b5998;
+        .modal img {
+            display: block;
+            max-width: 100%;
+            max-height: 90vh;
+            margin: 0 auto;
+            border-radius: 8px;
+            object-fit: contain;
+        }
+
+        .modal h5 {
+            margin-top: 15px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.6);
             color: white;
             border: none;
-        }
-
-        .btn-custom:hover {
-            background-color: #2a4276;
-        }
-
-        .home-icon {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: rgba(82, 82, 82, 0.7);
-            border-radius: 50%;
-            padding: 10px;
-            cursor: pointer;
-            color: white;
-            font-size: 20px; 
-        }
-
-        .home-icon:hover {
-            background-color: #3b3b3b;
-        }
-
-        .lamp-button {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: rgba(82, 82, 82, 0.7);
-            border: none;
-            border-radius: 50%;
-            padding: 10px;
-            cursor: pointer;
             font-size: 24px;
-            transition: background-color 0.5s;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 9999;
+            transition: background-color 0.3s;
         }
 
-        .lamp-button.active {
-            background-color: #f0f0f0;
-        }
-
-        .lamp-button:before {
-            content: '💡';
-        }
-
-        .aurora {
-            background: linear-gradient(45deg, #ffffff, #ffffff);
-            background-size: 400% 400%;
-            animation: aurora 10s ease infinite;
-        }
-
-        @keyframes aurora {
-            0% { background-position: 0% 0%; }
-            50% { background-position: 100% 100%; }
-            100% { background-position: 0% 0%; }
+        .modal-close:hover {
+            background: rgba(0, 0, 0, 0.8);
         }
 
         @media (max-width: 767px) {
             .gallery {
-                grid-template-columns: repeat(1, 1fr);
+                column-count: 2;
+            }
+
+            .modal-content {
+                max-width: 95%;
+                max-height: 95%;
             }
         }
     </style>
@@ -123,13 +123,6 @@
 
 <div class="header">
     Eclipse
-</div>
-
-<div class="container mt-4 text-center">
-    <select id="language-selector" class="form-control" style="max-width: 200px; margin: 0 auto;">
-        <option value="en">English</option>
-        <option value="ru">Русский</option>
-    </select>
 </div>
 
 <div class="container mt-4">
@@ -150,21 +143,23 @@
             </div>
             <input type="file" class="form-control mb-3" id="image" accept="image/*" required>
             <div class="text-center">
-                <button type="button" class="btn btn-custom" onclick="upload()">Загрузить</button>
+                <button type="button" class="btn btn-custom" id="upload-btn" onclick="upload()">Загрузить</button>
             </div>
         </form>
+        <p id="status-message" class="text-center mt-3"></p>
     </div>
 
     <div class="gallery" id="posts"></div>
 </div>
 
-<!-- Home icon -->
-<a class="home-icon" href="index.html">
-    <i class="fas fa-home"></i>
-</a>
-
-<!-- Lamp button -->
-<button class="lamp-button" onclick="toggleBackground()"></button>
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+        <img id="modal-image" src="" alt="Modal Image">
+        <h5 id="modal-title"></h5>
+        <p id="modal-description"></p>
+    </div>
+</div>
 
 <script src="https://www.gstatic.com/firebasejs/7.14.2/firebase.js"></script>
 <script>
@@ -180,19 +175,8 @@
     };
     firebase.initializeApp(firebaseConfig);
 
-    function toggleBackground() {
-        var body = document.body;
-        var lampButton = document.querySelector('.lamp-button');
-        if (body.classList.contains('aurora')) {
-            body.classList.remove('aurora');
-            lampButton.classList.remove('active');
-        } else {
-            body.classList.add('aurora');
-            lampButton.classList.add('active');
-        }
-    }
-
     function upload() {
+        var uploadButton = document.getElementById("upload-btn");
         var image = document.getElementById('image').files[0];
         var name = document.getElementById('name').value;
         var className = document.getElementById('class').value;
@@ -203,32 +187,67 @@
             return;
         }
 
+        uploadButton.disabled = true;
+        uploadButton.innerHTML = "Загрузка...";
+
         var imageName = image.name;
         var storageRef = firebase.storage().ref('images/' + imageName);
+
         var uploadTask = storageRef.put(image);
 
-        // Simulate a delay for the upload
-        setTimeout(function() {
-            uploadTask.on('state_changed', function(snapshot) {
-                var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                console.log("Upload is " + progress + "% done");
-            }, function(error) {
-                console.error("Error uploading image: ", error);
-            }, function() {
-                uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-                    var post = {
-                        name: name,
-                        class: className,
-                        description: description,
-                        imageURL: downloadURL
-                    };
-                    firebase.database().ref('blogs/').push(post);
-                    
-                    // Clear form data
-                    document.getElementById('post-form').reset();
-                });
+        uploadTask.on('state_changed', function(snapshot) {
+            var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log("Upload is " + progress + "% done");
+        }, function(error) {
+            console.error("Error uploading image: ", error);
+            document.getElementById("status-message").textContent = "Ошибка при загрузке. Попробуйте еще раз.";
+            uploadButton.disabled = false;
+            uploadButton.innerHTML = "Загрузить";
+        }, function() {
+            uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                var post = {
+                    name: name,
+                    class: className,
+                    description: description,
+                    imageURL: downloadURL
+                };
+                firebase.database().ref('blogs/').push(post);
+                document.getElementById('post-form').reset();
+                document.getElementById("status-message").textContent = "Ваш пост опубликован!";
+                uploadButton.disabled = false;
+                uploadButton.innerHTML = "Загрузить";
             });
-        }, 3000); // Delay the upload process for 3 seconds
+        });
+    }
+
+    function openModal(postData) {
+        var modal = document.getElementById('modal');
+        var modalImage = document.getElementById('modal-image');
+        document.getElementById('modal-title').textContent = `${postData.name} (${postData.class})`;
+        document.getElementById('modal-description').textContent = postData.description;
+        modalImage.src = postData.imageURL;
+
+        // Check image aspect ratio to adjust modal size
+        var img = new Image();
+        img.src = postData.imageURL;
+        img.onload = function() {
+            var aspectRatio = img.width / img.height;
+            var modalContent = document.querySelector('.modal-content');
+
+            if (aspectRatio > 1) {  // Landscape (wide) image
+                modalContent.style.maxWidth = '80%';
+                modalContent.style.maxHeight = '75%';
+            } else {  // Portrait (tall) image
+                modalContent.style.maxWidth = '70%';
+                modalContent.style.maxHeight = '90%';
+            }
+
+            modal.style.display = 'flex';
+        };
+    }
+
+    function closeModal() {
+        document.getElementById('modal').style.display = 'none';
     }
 
     firebase.database().ref('blogs/').on('value', function(snapshot) {
@@ -236,16 +255,11 @@
         postsContainer.innerHTML = '';
         snapshot.forEach(function(childSnapshot) {
             var postData = childSnapshot.val();
-            var card = document.createElement('div');
-            card.className = 'card';
-            card.innerHTML = `
-                <img src="${postData.imageURL}" alt="Post Image">
-                <div class="card-body">
-                    <h5>${postData.name} (${postData.class})</h5>
-                    <p>${postData.description}</p>
-                </div>
-            `;
-            postsContainer.insertBefore(card, postsContainer.firstChild); // New posts appear first
+            var img = document.createElement('img');
+            img.src = postData.imageURL;
+            img.alt = "Post Image";
+            img.onclick = function() { openModal(postData); };
+            postsContainer.appendChild(img);
         });
     });
 </script>
