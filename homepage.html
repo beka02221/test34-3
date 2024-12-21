@@ -8,9 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         body {
-            font-family: Arial, sans-serif; /* Заменил на обычный шрифт */
+            font-family: Arial, sans-serif; 
             background-color: #2e2e2e;
-            transition: background-color 0.3s;
             color: #000000;
             text-align: center;
             margin-top: 50px;
@@ -20,7 +19,6 @@
             background-color: #96666200;
             color: rgb(255, 116, 109);
             padding: 20px;
-            position: center;
             font-size: 3rem;
         }
 
@@ -65,7 +63,6 @@
             background-color: #2a4276;
         }
 
-        /* Измененные стили для иконки домика */
         .home-icon {
             position: fixed;
             bottom: 20px;
@@ -75,8 +72,7 @@
             padding: 10px;
             cursor: pointer;
             color: white;
-            font-size: 20px; /* Уменьшен размер иконки */
-            transition: background-color 0.3s;
+            font-size: 20px; 
         }
 
         .home-icon:hover {
@@ -85,8 +81,8 @@
 
         .lamp-button {
             position: fixed;
-            top: 20px; /* Перемещена вверх */
-            right: 20px; /* Сдвинута немного вправо */
+            top: 20px;
+            right: 20px;
             background-color: rgba(82, 82, 82, 0.7);
             border: none;
             border-radius: 50%;
@@ -162,12 +158,12 @@
     <div class="gallery" id="posts"></div>
 </div>
 
-<!-- Изменённая иконка домика -->
+<!-- Home icon -->
 <a class="home-icon" href="index.html">
     <i class="fas fa-home"></i>
 </a>
 
-<!-- Лампочка -->
+<!-- Lamp button -->
 <button class="lamp-button" onclick="toggleBackground()"></button>
 
 <script src="https://www.gstatic.com/firebasejs/7.14.2/firebase.js"></script>
@@ -209,48 +205,31 @@
 
         var imageName = image.name;
         var storageRef = firebase.storage().ref('images/' + imageName);
-
         var uploadTask = storageRef.put(image);
 
-        uploadTask.on('state_changed', function(snapshot) {
-            var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            console.log("Upload is " + progress + "% done");
-        }, function(error) {
-            console.error("Error uploading image: ", error);
-        }, function() {
-            uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-                var post = {
-                    name: name,
-                    class: className,
-                    description: description,
-                    imageURL: downloadURL
-                };
-                firebase.database().ref('blogs/').push(post);
-                document.getElementById('post-form').reset();
+        // Simulate a delay for the upload
+        setTimeout(function() {
+            uploadTask.on('state_changed', function(snapshot) {
+                var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log("Upload is " + progress + "% done");
+            }, function(error) {
+                console.error("Error uploading image: ", error);
+            }, function() {
+                uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                    var post = {
+                        name: name,
+                        class: className,
+                        description: description,
+                        imageURL: downloadURL
+                    };
+                    firebase.database().ref('blogs/').push(post);
+                    
+                    // Clear form data
+                    document.getElementById('post-form').reset();
+                });
             });
-        });
+        }, 3000); // Delay the upload process for 3 seconds
     }
-
-    function setLanguage() {
-        var selectedLanguage = document.getElementById("language-selector").value;
-        if (selectedLanguage === "ru") {
-            document.querySelector('.header').textContent = 'Eclipse';
-            document.querySelector('.post-form h3').textContent = 'Создать пост';
-            document.querySelector('label[for="name"]').textContent = 'Имя:';
-            document.querySelector('label[for="class"]').textContent = 'Класс:';
-            document.querySelector('label[for="description"]').textContent = 'Описание:';
-            document.querySelector('.btn-custom').textContent = 'Загрузить';
-        } else {
-            document.querySelector('.header').textContent = 'Eclipse';
-            document.querySelector('.post-form h3').textContent = 'Create Post';
-            document.querySelector('label[for="name"]').textContent = 'Name:';
-            document.querySelector('label[for="class"]').textContent = 'Class:';
-            document.querySelector('label[for="description"]').textContent = 'Description:';
-            document.querySelector('.btn-custom').textContent = 'Upload';
-        }
-    }
-
-    document.getElementById("language-selector").addEventListener("change", setLanguage);
 
     firebase.database().ref('blogs/').on('value', function(snapshot) {
         var postsContainer = document.getElementById('posts');
@@ -266,7 +245,7 @@
                     <p>${postData.description}</p>
                 </div>
             `;
-            postsContainer.insertBefore(card, postsContainer.firstChild); // Новые посты в начало
+            postsContainer.insertBefore(card, postsContainer.firstChild); // New posts appear first
         });
     });
 </script>
