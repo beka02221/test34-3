@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,28 +7,36 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
+        /* Добавляем стили для страницы */
         body {
             font-family: Arial, sans-serif;
-            background-color: #2e2e2e;
-            color: #000000;
+            background-color: #6E546C;
+            color: #FFE0E6;
             margin: 0;
             padding: 0;
         }
 
         .header {
             background-color: #96666200;
-            color: rgb(255, 116, 109);
+            color: rgb(255, 255, 255);
             padding: 20px;
-            font-size: 3rem;
+            font-size: 5rem;
             text-align: center;
         }
 
         .post-form {
-            background-color: rgb(255, 116, 109);
+            background-color: #242E49;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             margin: 20px;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .post-form.show {
+            display: block;
+            opacity: 1;
         }
 
         .gallery {
@@ -65,7 +73,7 @@
         }
 
         .modal-content {
-            background-color: #fff;
+            background-color: #242E49;
             padding: 20px;
             border-radius: 8px;
             text-align: center;
@@ -89,22 +97,61 @@
         }
 
         .modal-close {
-            position: absolute;
-            top: 10px;
+            position: fixed;
+            top: 480px;
             right: 20px;
-            background: rgba(0, 0, 0, 0.6);
-            color: white;
+            background: rgba(255, 255, 255, 0.6);
+            color: rgb(0, 0, 0);
             border: none;
-            font-size: 24px;
+            font-size: 30px;
             padding: 10px;
-            border-radius: 50%;
+            border-radius: 0%;
             cursor: pointer;
             z-index: 9999;
             transition: background-color 0.3s;
         }
 
         .modal-close:hover {
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(236, 32, 32, 0.311);
+        }
+
+        .navigation-buttons {
+            position: fixed;
+            bottom: 10px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .navigation-buttons button {
+            background-color: #242e49;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .navigation-buttons button:hover {
+            background-color: #3949ab;
+        }
+
+        #create-post-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #242e49;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 999;
+        }
+
+        #create-post-btn:hover {
+            background-color: #3949ab;
         }
 
         @media (max-width: 767px) {
@@ -121,12 +168,14 @@
 </head>
 <body>
 
-<div class="header">
-    Eclipse
-</div>
+    <div class="header" style="font-family: 'Helvetica', 'Arial', sans-serif; font-size: 48px; font-weight: bold; color: #FFE0E6; text-align: center; margin-top: 50px;">
+        Eclipse
+    </div>
+    
+<button id="create-post-btn" onclick="togglePostForm()">Создать пост</button>
 
 <div class="container mt-4">
-    <div class="post-form">
+    <div class="post-form" id="post-form">
         <form id="post-form">
             <h3 class="text-center">Создать пост</h3>
             <div class="form-group">
@@ -158,7 +207,13 @@
         <img id="modal-image" src="" alt="Modal Image">
         <h5 id="modal-title"></h5>
         <p id="modal-description"></p>
+        <button class="btn btn-primary" id="share-btn" onclick="shareImage()">Поделиться</button>
     </div>
+</div>
+
+<div class="navigation-buttons">
+    <button onclick="window.location.href = 'index.html';">Home</button>
+    <button onclick="window.location.href = 'chats.html';">Chats</button>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/7.14.2/firebase.js"></script>
@@ -174,6 +229,11 @@
         measurementId: "G-5YGKQ3QP31"
     };
     firebase.initializeApp(firebaseConfig);
+
+    function togglePostForm() {
+        var postForm = document.getElementById('post-form');
+        postForm.classList.toggle('show');
+    }
 
     function upload() {
         var uploadButton = document.getElementById("upload-btn");
@@ -216,6 +276,11 @@
                 document.getElementById("status-message").textContent = "Ваш пост опубликован!";
                 uploadButton.disabled = false;
                 uploadButton.innerHTML = "Загрузить";
+            }).catch(function(error) {
+                console.error("Error fetching download URL: ", error);
+                document.getElementById("status-message").textContent = "Ошибка при загрузке. Попробуйте еще раз.";
+                uploadButton.disabled = false;
+                uploadButton.innerHTML = "Загрузить";
             });
         });
     }
@@ -250,6 +315,22 @@
         document.getElementById('modal').style.display = 'none';
     }
 
+    function shareImage() {
+        var imageUrl = document.getElementById('modal-image').src;
+        if (navigator.share) {
+            navigator.share({
+                title: 'Shared Image',
+                url: imageUrl
+            }).then(() => {
+                console.log('Shared successfully');
+            }).catch((error) => {
+                console.error('Error sharing', error);
+            });
+        } else {
+            alert('Поделиться невозможно в этом браузере.');
+        }
+    }
+
     firebase.database().ref('blogs/').on('value', function(snapshot) {
         var postsContainer = document.getElementById('posts');
         postsContainer.innerHTML = '';
@@ -263,5 +344,9 @@
         });
     });
 </script>
+
+<!-- Add this element to show status messages -->
+<div id="status-message"></div>
+
 </body>
 </html>
