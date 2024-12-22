@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Админ панель чата</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ecf0f1;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: #34495e;
+      padding: 20px;
+      border-radius: 8px;
+      color: #ecf0f1;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .messages-list {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .message {
+      background-color: #2c3e50;
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .message span {
+      font-weight: bold;
+    }
+
+    .message p {
+      margin: 0;
+      flex: 1;
+      padding-left: 10px;
+    }
+
+    .delete-btn {
+      background-color: #e74c3c;
+      border: none;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .delete-btn:hover {
+      background-color: #c0392b;
+    }
+
+    .empty-msg {
+      text-align: center;
+      font-size: 16px;
+      margin-top: 20px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="container mt-2">
+    <button class="btn btn-secondary" onclick="goBack()">← Назад</button>
+</div>
+
+
+  <div class="container">
+    <h1>Админ Панель Чата</h1>
+    <ul class="messages-list" id="messages-list"></ul>
+    <p class="empty-msg" id="empty-msg">Нет сообщений для отображения</p>
+  </div>
+
+  
+
+  <script>
+    // Инициализация переменной для хранения сообщений в JSON
+    let messages = JSON.parse(localStorage.getItem('messages') || '[]');
+
+    // Функция для отображения сообщений в админ панели
+    function displayMessages() {
+      const messagesList = document.getElementById('messages-list');
+      const emptyMsg = document.getElementById('empty-msg');
+      
+      messagesList.innerHTML = ''; // Очищаем список сообщений
+      if (messages.length === 0) {
+        emptyMsg.style.display = 'block';
+      } else {
+        emptyMsg.style.display = 'none';
+        messages.forEach((msg, index) => {
+          const messageElement = document.createElement('li');
+          messageElement.classList.add('message');
+          messageElement.innerHTML = `
+            <span>Сообщение ${index + 1}:</span>
+            <p>${msg}</p>
+            <button class="delete-btn" onclick="deleteMessage(${index})">Удалить</button>
+          `;
+          messagesList.appendChild(messageElement);
+        });
+      }
+    }
+
+    // Функция для удаления сообщения
+    function deleteMessage(index) {
+      messages.splice(index, 1); // Удаляем сообщение из массива
+      localStorage.setItem('messages', JSON.stringify(messages)); // Обновляем localStorage
+      displayMessages(); // Обновляем список сообщений
+    }
+
+    // Отображаем сообщения при загрузке страницы
+    displayMessages();
+  </script>
+
+<script>
+  function goBack() {
+      window.location.href = 'index.html';
+  }
+</script>
+
+</body>
+</html>
