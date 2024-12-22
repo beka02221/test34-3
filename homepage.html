@@ -10,22 +10,22 @@
         /* Добавляем стили для страницы */
         body {
             font-family: Arial, sans-serif;
-            background-color: #6E546C;
-            color: #FFE0E6;
+            background-color: #333233;
+            color: #000000;
             margin: 0;
             padding: 0;
         }
 
         .header {
-            background-color: #96666200;
-            color: rgb(255, 255, 255);
+            background-color: #c58b8600;
+            color: #ff746d;
             padding: 20px;
             font-size: 5rem;
             text-align: center;
         }
 
         .post-form {
-            background-color: #242E49;
+            background-color: #ff746d;
             padding: 20px;
             border-radius: 8px;
             margin: 20px;
@@ -73,7 +73,7 @@
         }
 
         .modal-content {
-            background-color: #242E49;
+            background-color: #ff746d;
             padding: 20px;
             border-radius: 8px;
             text-align: center;
@@ -97,23 +97,32 @@
         }
 
         .modal-close {
-            position: fixed;
-            top: 480px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.6);
-            color: rgb(0, 0, 0);
-            border: none;
-            font-size: 30px;
-            padding: 10px;
-            border-radius: 0%;
-            cursor: pointer;
-            z-index: 9999;
-            transition: background-color 0.3s;
-        }
+    position: absolute; /* Позиционирование относительно модального окна */
+    top: 10px; /* Расстояние от верхнего края модального окна */
+    right: 10px; /* Расстояние от правого края модального окна */
+    background: rgba(255, 255, 255, 0.8); /* Легкий фон */
+    color: rgb(50, 50, 50); /* Цвет текста */
+    border: none; /* Без рамок */
+    font-size: 30px; /* Размер шрифта для символа X */
+    width: 40px; /* Ширина кнопки */
+    height: 40px; /* Высота кнопки, равная ширине для круглой формы */
+    border-radius: 50%; /* Полностью круглая форма */
+    display: flex; /* Использование flexbox для центрирования содержимого */
+    align-items: center; /* Вертикальное центрирование */
+    justify-content: center; /* Горизонтальное центрирование */
+    cursor: pointer; /* Указатель при наведении */
+    z-index: 1000; /* Поверх других элементов */
+    transition: background-color 0.3s ease; /* Плавный переход фона */
+}
 
-        .modal-close:hover {
-            background: rgba(236, 32, 32, 0.311);
-        }
+.modal-close:hover {
+    background: rgba(200, 200, 200, 0.8); /* Изменение фона при наведении */
+    color: rgb(0, 0, 0); /* Цвет текста при наведении */
+}
+
+
+
+      
 
         .navigation-buttons {
             position: fixed;
@@ -125,7 +134,7 @@
         }
 
         .navigation-buttons button {
-            background-color: #242e49;
+            background-color: #ff746d;
             color: white;
             padding: 10px 20px;
             border: none;
@@ -134,24 +143,53 @@
         }
 
         .navigation-buttons button:hover {
-            background-color: #3949ab;
+            background-color: #f4463d;
         }
 
         #create-post-btn {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: #242e49;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #ff746d;
             color: white;
-            padding: 10px 20px;
+            padding: 10px 30px;
             border: none;
-            border-radius: 5px;
+            border-radius: 40px;
             cursor: pointer;
             z-index: 999;
         }
 
         #create-post-btn:hover {
-            background-color: #3949ab;
+            background-color: #f64d45;
+        }
+
+        .search-bar {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .search-bar input {
+            width: 300px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        .search-bar button {
+            padding: 10px 20px;
+            margin-left: 10px;
+            background-color: #ff746d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .search-bar button:hover {
+            background-color: #ff4e45;
         }
 
         @media (max-width: 767px) {
@@ -168,185 +206,209 @@
 </head>
 <body>
 
-    <div class="header" style="font-family: 'Helvetica', 'Arial', sans-serif; font-size: 48px; font-weight: bold; color: #FFE0E6; text-align: center; margin-top: 50px;">
+    <div class="header" style="font-family: 'Helvetica', 'Arial', sans-serif; font-size: 48px; font-weight: bold; color: #ff746d; text-align: center; margin-top: 50px;">
         Eclipse
     </div>
-    
-<button id="create-post-btn" onclick="togglePostForm()">Создать пост</button>
 
-<div class="container mt-4">
-    <div class="post-form" id="post-form">
-        <form id="post-form">
-            <h3 class="text-center">Создать пост</h3>
-            <div class="form-group">
-                <label for="name">Имя:</label>
-                <input type="text" id="name" class="form-control" required placeholder="Введите ваше имя">
-            </div>
-            <div class="form-group">
-                <label for="class">Класс:</label>
-                <input type="text" id="class" class="form-control" required placeholder="Введите ваш класс">
-            </div>
-            <div class="form-group">
-                <label for="description">Описание:</label>
-                <textarea id="description" class="form-control" required rows="3" placeholder="Введите описание"></textarea>
-            </div>
-            <input type="file" class="form-control mb-3" id="image" accept="image/*" required>
-            <div class="text-center">
-                <button type="button" class="btn btn-custom" id="upload-btn" onclick="upload()">Загрузить</button>
-            </div>
-        </form>
-        <p id="status-message" class="text-center mt-3"></p>
+    <button id="create-post-btn" onclick="togglePostForm()">+</button>
+
+    <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Введите текст для поиска">
+        <button onclick="searchPosts()">Поиск</button>
     </div>
 
-    <div class="gallery" id="posts"></div>
-</div>
+    <div class="container mt-4">
+        <div class="post-form" id="post-form">
+            <form id="post-form">
+                <h2 class="text-center">Создать пост</h2>
+                <div class="form-group">
+                    <label for="name">Имя:</label>
+                    <input type="text" id="name" class="form-control" required placeholder="Введите ваше имя">
+                </div>
+                <div class="form-group">
+                    <label for="class">Класс:</label>
+                    <input type="text" id="class" class="form-control" required placeholder="Введите ваш класс">
+                </div>
+                <div class="form-group">
+                    <label for="description">Описание:</label>
+                    <textarea id="description" class="form-control" required rows="3" placeholder="Введите описание"></textarea>
+                </div>
+                <input type="file" class="form-control mb-3" id="image" accept="image/*" required>
+                <div class="text-center">
+                    <button type="button" class="btn btn-custom" id="upload-btn" onclick="upload()">Загрузить</button>
+                </div>
+            </form>
+            <p id="status-message" class="text-center mt-3"></p>
+        </div>
 
-<div class="modal" id="modal">
-    <div class="modal-content">
-        <button class="modal-close" onclick="closeModal()">&times;</button>
-        <img id="modal-image" src="" alt="Modal Image">
-        <h5 id="modal-title"></h5>
-        <p id="modal-description"></p>
-        <button class="btn btn-primary" id="share-btn" onclick="shareImage()">Поделиться</button>
+        <div class="gallery" id="posts"></div>
     </div>
-</div>
 
-<div class="navigation-buttons">
-    <button onclick="window.location.href = 'index.html';">Home</button>
-    <button onclick="window.location.href = 'chats.html';">Chats</button>
-</div>
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <img id="modal-image" src="" alt="Modal Image">
+            <h5 id="modal-title"></h5>
+            <p id="modal-description"></p>
+            <button class="btn btn-primary" id="share-btn" onclick="shareImage()">Поделиться</button>
+        </div>
+    </div>
 
-<script src="https://www.gstatic.com/firebasejs/7.14.2/firebase.js"></script>
-<script>
-    var firebaseConfig = {
-        apiKey: "AIzaSyDj6o_BvyuXiHlop80SGA1UiG17XfhOnyE",
-        authDomain: "blogs-957a9.firebaseapp.com",
-        databaseURL: "https://blogs-957a9-default-rtdb.firebaseio.com",
-        projectId: "blogs-957a9",
-        storageBucket: "blogs-957a9.appspot.com",
-        messagingSenderId: "160842509516",
-        appId: "1:160842509516:web:7da2312ccc8f6277dc6669",
-        measurementId: "G-5YGKQ3QP31"
-    };
-    firebase.initializeApp(firebaseConfig);
+    <div class="navigation-buttons">
+        <button onclick="window.location.href = 'index.html';">Home</button>
+        <button onclick="window.location.href = 'chats.html';">Chats</button>
+    </div>
 
-    function togglePostForm() {
-        var postForm = document.getElementById('post-form');
-        postForm.classList.toggle('show');
-    }
+    <script src="https://www.gstatic.com/firebasejs/7.14.2/firebase.js"></script>
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyDj6o_BvyuXiHlop80SGA1UiG17XfhOnyE",
+            authDomain: "blogs-957a9.firebaseapp.com",
+            databaseURL: "https://blogs-957a9-default-rtdb.firebaseio.com",
+            projectId: "blogs-957a9",
+            storageBucket: "blogs-957a9.appspot.com",
+            messagingSenderId: "160842509516",
+            appId: "1:160842509516:web:7da2312ccc8f6277dc6669",
+            measurementId: "G-5YGKQ3QP31"
+        };
+        firebase.initializeApp(firebaseConfig);
 
-    function upload() {
-        var uploadButton = document.getElementById("upload-btn");
-        var image = document.getElementById('image').files[0];
-        var name = document.getElementById('name').value;
-        var className = document.getElementById('class').value;
-        var description = document.getElementById('description').value;
-
-        if (!name || !className || !description || !image) {
-            alert("Пожалуйста, заполните все поля.");
-            return;
+        function togglePostForm() {
+            var postForm = document.getElementById('post-form');
+            postForm.classList.toggle('show');
         }
 
-        uploadButton.disabled = true;
-        uploadButton.innerHTML = "Загрузка...";
+        function upload() {
+            var uploadButton = document.getElementById("upload-btn");
+            var image = document.getElementById('image').files[0];
+            var name = document.getElementById('name').value;
+            var className = document.getElementById('class').value;
+            var description = document.getElementById('description').value;
 
-        var imageName = image.name;
-        var storageRef = firebase.storage().ref('images/' + imageName);
+            if (!name || !className || !description || !image) {
+                alert("Пожалуйста, заполните все поля.");
+                return;
+            }
 
-        var uploadTask = storageRef.put(image);
+            uploadButton.disabled = true;
+            uploadButton.innerHTML = "Загрузка...";
 
-        uploadTask.on('state_changed', function(snapshot) {
-            var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            console.log("Upload is " + progress + "% done");
-        }, function(error) {
-            console.error("Error uploading image: ", error);
-            document.getElementById("status-message").textContent = "Ошибка при загрузке. Попробуйте еще раз.";
-            uploadButton.disabled = false;
-            uploadButton.innerHTML = "Загрузить";
-        }, function() {
-            uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-                var post = {
-                    name: name,
-                    class: className,
-                    description: description,
-                    imageURL: downloadURL
-                };
-                firebase.database().ref('blogs/').push(post);
-                document.getElementById('post-form').reset();
+            var imageName = image.name;
+            var storageRef = firebase.storage().ref('images/' + imageName);
+
+            var uploadTask = storageRef.put(image);
+
+            uploadTask.on('state_changed', function(snapshot) {
+                var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log("Upload is " + progress + "% done");
+            }, function(error) {
+                console.error("Error uploading image: ", error);
                 document.getElementById("status-message").textContent = "Ваш пост опубликован!";
                 uploadButton.disabled = false;
                 uploadButton.innerHTML = "Загрузить";
-            }).catch(function(error) {
-                console.error("Error fetching download URL: ", error);
-                document.getElementById("status-message").textContent = "Ошибка при загрузке. Попробуйте еще раз.";
-                uploadButton.disabled = false;
-                uploadButton.innerHTML = "Загрузить";
+            }, function() {
+                uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                    var post = {
+                        name: name,
+                        class: className,
+                        description: description,
+                        imageURL: downloadURL
+                    };
+                    firebase.database().ref('blogs/').push(post);
+                    document.getElementById('post-form').reset();
+                    document.getElementById("status-message").textContent = "Ваш пост опубликован!";
+                    uploadButton.disabled = false;
+                    uploadButton.innerHTML = "Загрузить";
+                }).catch(function(error) {
+                    console.error("Error fetching download URL: ", error);
+                    document.getElementById("status-message").textContent = "Ваш пост опубликован!";
+                    uploadButton.disabled = false;
+                    uploadButton.innerHTML = "Загрузить";
+                });
             });
-        });
-    }
-
-    function openModal(postData) {
-        var modal = document.getElementById('modal');
-        var modalImage = document.getElementById('modal-image');
-        document.getElementById('modal-title').textContent = `${postData.name} (${postData.class})`;
-        document.getElementById('modal-description').textContent = postData.description;
-        modalImage.src = postData.imageURL;
-
-        // Check image aspect ratio to adjust modal size
-        var img = new Image();
-        img.src = postData.imageURL;
-        img.onload = function() {
-            var aspectRatio = img.width / img.height;
-            var modalContent = document.querySelector('.modal-content');
-
-            if (aspectRatio > 1) {  // Landscape (wide) image
-                modalContent.style.maxWidth = '80%';
-                modalContent.style.maxHeight = '75%';
-            } else {  // Portrait (tall) image
-                modalContent.style.maxWidth = '70%';
-                modalContent.style.maxHeight = '90%';
-            }
-
-            modal.style.display = 'flex';
-        };
-    }
-
-    function closeModal() {
-        document.getElementById('modal').style.display = 'none';
-    }
-
-    function shareImage() {
-        var imageUrl = document.getElementById('modal-image').src;
-        if (navigator.share) {
-            navigator.share({
-                title: 'Shared Image',
-                url: imageUrl
-            }).then(() => {
-                console.log('Shared successfully');
-            }).catch((error) => {
-                console.error('Error sharing', error);
-            });
-        } else {
-            alert('Поделиться невозможно в этом браузере.');
         }
-    }
 
-    firebase.database().ref('blogs/').on('value', function(snapshot) {
-        var postsContainer = document.getElementById('posts');
-        postsContainer.innerHTML = '';
-        snapshot.forEach(function(childSnapshot) {
-            var postData = childSnapshot.val();
-            var img = document.createElement('img');
+        function openModal(postData) {
+            var modal = document.getElementById('modal');
+            var modalImage = document.getElementById('modal-image');
+            document.getElementById('modal-title').textContent = `${postData.name} (${postData.class})`;
+            document.getElementById('modal-description').textContent = postData.description;
+            modalImage.src = postData.imageURL;
+
+            var img = new Image();
             img.src = postData.imageURL;
-            img.alt = "Post Image";
-            img.onclick = function() { openModal(postData); };
-            postsContainer.appendChild(img);
-        });
-    });
-</script>
+            img.onload = function() {
+                var aspectRatio = img.width / img.height;
+                var modalContent = document.querySelector('.modal-content');
 
-<!-- Add this element to show status messages -->
-<div id="status-message"></div>
+                if (aspectRatio > 1) {
+                    modalContent.style.maxWidth = '80%';
+                    modalContent.style.maxHeight = '75%';
+                } else {
+                    modalContent.style.maxWidth = '70%';
+                    modalContent.style.maxHeight = '90%';
+                }
+
+                modal.style.display = 'flex';
+            };
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        function shareImage() {
+            var imageUrl = document.getElementById('modal-image').src;
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Shared Image',
+                    url: imageUrl
+                }).then(() => {
+                    console.log('Shared successfully');
+                }).catch((error) => {
+                    console.error('Error sharing', error);
+                });
+            } else {
+                alert('Поделиться невозможно в этом браузере.');
+            }
+        }
+
+        function searchPosts() {
+            var query = document.getElementById('search-input').value.toLowerCase();
+            var postsContainer = document.getElementById('posts');
+            firebase.database().ref('blogs/').once('value', function(snapshot) {
+                postsContainer.innerHTML = '';
+                snapshot.forEach(function(childSnapshot) {
+                    var postData = childSnapshot.val();
+                    if (postData.name.toLowerCase().includes(query) ||
+                        postData.class.toLowerCase().includes(query) ||
+                        postData.description.toLowerCase().includes(query)) {
+                        var img = document.createElement('img');
+                        img.src = postData.imageURL;
+                        img.alt = "Post Image";
+                        img.onclick = function() { openModal(postData); };
+                        postsContainer.appendChild(img);
+                    }
+                });
+            });
+        }
+
+        firebase.database().ref('blogs/').on('value', function(snapshot) {
+            var postsContainer = document.getElementById('posts');
+            postsContainer.innerHTML = '';
+            snapshot.forEach(function(childSnapshot) {
+                var postData = childSnapshot.val();
+                var img = document.createElement('img');
+                img.src = postData.imageURL;
+                img.alt = "Post Image";
+                img.onclick = function() { openModal(postData); };
+                postsContainer.appendChild(img);
+            });
+        });
+    </script>
+
+    <!-- Add this element to show status messages -->
+    <div id="status-message"></div>
 
 </body>
 </html>
