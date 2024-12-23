@@ -1,0 +1,104 @@
+/* General Body Styles */
+body {
+    background-color: #f8f9fa; /* Light background for readability */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Modal Styles */
+.modal-content {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Message Group Styling */
+.msg-group {
+    max-height: 500px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    background-color: #ffffff;
+}
+
+/* Input Group Styling */
+.input-group {
+    position: fixed;
+    bottom: 20px;
+    width: 100%;
+    max-width: 600px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.input-btn {
+    width: 120px;
+}
+
+textarea#input-box {
+    resize: none;
+}
+
+/* Online Users Label */
+.online-users-label {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    font-size: 14px;
+}
+
+/* Card Styling for Messages */
+.card {
+    margin-bottom: 10px;
+    border: none;
+}
+
+.card-body {
+    padding: 10px 15px;
+}
+
+/* Text Alignments */
+.text-start {
+    text-align: left !important;
+}
+
+.text-end {
+    text-align: right !important;
+}
+
+.float-start {
+    float: left !important;
+}
+
+.float-end {
+    float: right !important;
+}
+
+/* Name and Message Display */
+.card-subtitle {
+    font-size: 12px;
+    font-weight: bold;
+    opacity: 0.8;
+    margin-bottom: 5px;
+}
+
+.card-text {
+    font-size: 14px;
+    word-wrap: break-word;
+}
+
+/* Scrollbar Styling */
+.msg-group::-webkit-scrollbar {
+    width: 8px;
+}
+
+.msg-group::-webkit-scrollbar-thumb {
+    background-color: #6c757d;
+    border-radius: 10px;
+}
+
+.msg-group::-webkit-scrollbar-thumb:hover {
+    background-color: #495057;
+}
