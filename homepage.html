@@ -255,8 +255,8 @@
     </div>
 
     <div class="navigation-buttons">
-        <button onclick="window.location.href = 'index.html';">Home</button>
-        <button onclick="window.location.href = 'chats.html';">Chats</button>
+        <button onclick="window.location.href = 'index.html';">Назад</button>
+        <button onclick="window.location.href = 'chats.html';">Чат</button>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/7.14.2/firebase.js"></script>
@@ -361,7 +361,7 @@
             var imageUrl = document.getElementById('modal-image').src;
             if (navigator.share) {
                 navigator.share({
-                    title: 'Shared Image',
+                    title: 'Глянь, что я нашел на сайте MyEclipse.club!',
                     url: imageUrl
                 }).then(() => {
                     console.log('Shared successfully');
